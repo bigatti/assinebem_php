@@ -14,4 +14,4 @@ ASSINE_BEM_SECRET="SEU_SECRET"
 
 **Rodar comandos:**
 - Instalar as dependências:
-`compose install`
+`composer install`
