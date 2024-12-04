@@ -11,6 +11,9 @@ class AuthAD {
 
     public function monta_security_hash($endpoint='', $query_string='')
     {
+	if ($query_string) {
+            $query_string = http_build_query($query_string);
+        }
         $url_request = $this->ASSINE_BEM_URL.$endpoint;
         $token_acesso = hash('sha256', $url_request.$this->ASSINE_BEM_SECRET.$query_string);
         $security_hash = base64_encode($this->ASSINE_BEM_TOKEN.':'.$token_acesso);
@@ -70,7 +73,7 @@ class AuthAD {
 
         # -- endpoint de solicitar criacao da parte ---
         $url = '/parte';
-        $security_hash_fmt = $this->monta_security_hash($url, '');
+        $security_hash_fmt = $this->monta_security_hash($url, $params);
         $result = $this->send_request('POST', $security_hash_fmt, $url, $params);
 
         return $result;
@@ -97,7 +100,7 @@ class AuthAD {
         ];
 
         $url = '/documento/download';
-        $security_hash_fmt = $this->monta_security_hash($url, http_build_query($params));
+        $security_hash_fmt = $this->monta_security_hash($url, $params);
         $result = $this->send_request('GET', $security_hash_fmt, $url, $params);
         return $result;
     }
@@ -106,7 +109,7 @@ class AuthAD {
     {
         $params  = ['id_externo' => $id_externo];
         $url = '/documento/invalidar';
-        $security_hash_fmt = $this->monta_security_hash($url, '');
+        $security_hash_fmt = $this->monta_security_hash($url, $params);
 
         $result = $this->send_request('POST', $security_hash_fmt, $url, $params);
 
@@ -159,7 +162,7 @@ class AuthAD {
         }
         # -- endpoint de solicitar upload do documento ---
         $url = '/documento';
-        $security_hash_fmt = $this->monta_security_hash($url, '');
+        $security_hash_fmt = $this->monta_security_hash($url, $params);
 
         $result = $this->send_request('POST', $security_hash_fmt, $url, $params);
         return $result;
@@ -182,7 +185,7 @@ class AuthAD {
 
         # -- endpoint de solicitar upload do documento ---
         $url = '/documento';
-        $security_hash_fmt = $this->monta_security_hash($url, '');
+        $security_hash_fmt = $this->monta_security_hash($url, $params);
 
         $result = $this->send_request('POST', $security_hash_fmt, $url, $params);
         return $result;
